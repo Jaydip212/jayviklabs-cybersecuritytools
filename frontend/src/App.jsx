@@ -8,6 +8,11 @@ import ThreatSimulator from './components/ThreatSimulator'
 import LearnMode from './components/LearnMode'
 import PhishingAnalyzer from './components/PhishingAnalyzer'
 import ReconPlanner from './components/ReconPlanner'
+import NmapSimulator from './components/NmapSimulator'
+import DnsEnumerator from './components/DnsEnumerator'
+import SslAnalyzer from './components/SslAnalyzer'
+import SubdomainEnumerator from './components/SubdomainEnumerator'
+import WhoisLookup from './components/WhoisLookup'
 import AboutPage from './components/AboutPage'
 
 export default function App(){
@@ -26,7 +31,7 @@ export default function App(){
               <span className="metric-label">Safe Training</span>
             </div>
             <div className="metric-card">
-              <span className="metric-value">5 Labs</span>
+              <span className="metric-value">12 Labs</span>
               <span className="metric-label">Interactive Modules</span>
             </div>
             <div className="metric-card">
@@ -44,6 +49,11 @@ export default function App(){
           <PhishingAnalyzer />
           <ReconPlanner />
           <ThreatSimulator />
+          <NmapSimulator />
+          <DnsEnumerator />
+          <SslAnalyzer />
+          <SubdomainEnumerator />
+          <WhoisLookup />
         </div>
 
         <section id="testimonials" className="testimonials">
