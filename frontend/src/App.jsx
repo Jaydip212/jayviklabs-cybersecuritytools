@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import Navbar from './components/Navbar'
 import PasswordAnalyzer from './components/PasswordAnalyzer'
 import PortSimulator from './components/PortSimulator'
@@ -13,9 +13,34 @@ import DnsEnumerator from './components/DnsEnumerator'
 import SslAnalyzer from './components/SslAnalyzer'
 import SubdomainEnumerator from './components/SubdomainEnumerator'
 import WhoisLookup from './components/WhoisLookup'
+import PasswordGenerator from './components/PasswordGenerator'
+import EmailHeaderAnalyzer from './components/EmailHeaderAnalyzer'
+import SqlInjectionLab from './components/SqlInjectionLab'
 import AboutPage from './components/AboutPage'
 
 export default function App(){
+  const [achievements, setAchievements] = useState(() => {
+    const saved = localStorage.getItem('jayvik_achievements');
+    return saved ? JSON.parse(saved) : {
+      xp: 0,
+      level: 1,
+      tools_used: 0,
+      badges: []
+    };
+  });
+
+  useEffect(() => {
+    localStorage.setItem('jayvik_achievements', JSON.stringify(achievements));
+  }, [achievements]);
+
+  const addXP = (points = 10) => {
+    setAchievements(prev => {
+      const newXP = prev.xp + points;
+      const newLevel = Math.floor(newXP / 100) + 1;
+      return { ...prev, xp: newXP, level: newLevel };
+    });
+  };
+
   return (
     <div className="app-root" id="home">
       <Navbar />
@@ -31,12 +56,16 @@ export default function App(){
               <span className="metric-label">Safe Training</span>
             </div>
             <div className="metric-card">
-              <span className="metric-value">12 Labs</span>
+              <span className="metric-value">15 Labs</span>
               <span className="metric-label">Interactive Modules</span>
             </div>
             <div className="metric-card">
               <span className="metric-value">⚠️</span>
               <span className="metric-label">Ethical-Only</span>
+            </div>
+            <div className="metric-card gamer">
+              <span className="metric-value">Lvl {achievements.level}</span>
+              <span className="metric-label">XP: {achievements.xp}</span>
             </div>
           </div>
         </header>
@@ -54,6 +83,9 @@ export default function App(){
           <SslAnalyzer />
           <SubdomainEnumerator />
           <WhoisLookup />
+          <PasswordGenerator />
+          <EmailHeaderAnalyzer />
+          <SqlInjectionLab />
         </div>
 
         <section id="testimonials" className="testimonials">

@@ -2,10 +2,11 @@
 
 An interactive learning platform combining a React (Vite) frontend with a Python FastAPI backend. Everything runs locally and simulates cybersecurity concepts in a safe, legal environment — **no real networks or systems are touched.**
 
-## ✨ Features (12 Interactive Tools)
+## ✨ Features (15 Interactive Tools)
 
 ### 🔐 Core Security Tools
 - **Password Strength Analyzer** — Provides score, strength, and best-practice suggestions
+- **Password Generator** — Create cryptographically strong passwords with custom rules
 - **Hashing Demonstrator** — MD5, SHA-1, and SHA-256 with security notes
 - **Encryption & Encoding Lab** — AES encryption/decryption, Caesar cipher, Base64
 
@@ -16,15 +17,21 @@ An interactive learning platform combining a React (Vite) frontend with a Python
 - **Subdomain Enumerator** — Discover subdomains using wordlist simulation
 - **WHOIS Lookup** — Domain registration info, registrar, dates, nameservers
 
-### 🎯 Advanced Analysis
+### 🎯 Advanced Analysis & Web Security
 - **Port Scan Simulator** — Safe, deterministic port scan demonstration with ethical reminders
 - **Phishing Email Analyzer** — Spot social engineering red flags safely
+- **Email Header Analyzer** — Detect spoofing, authentication issues, and phishing indicators
+- **SQL Injection Lab** — Interactive SQL injection vulnerability detection and prevention
 - **Recon Blueprint Planner** — Generate ethical recon checklists for penetration testing
 
 ### 📚 Learning & Awareness
 - **Threat Detection Simulator** — Quiz-style incident response scenarios
 - **Learn Mode** — OWASP Top 10 reference grid with interactive quiz
 - **About Page** — Meet founder Jaydip Jadhav and learn about Jayvik Labs' ethical hacking mission
+
+### 🎮 Gamification
+- **Achievement System** — Earn XP points and level up as you use tools
+- **Progress Tracking** — localStorage persistence of your XP, level, and achievements
 
 ## 🧱 Project Structure
 
@@ -46,10 +53,12 @@ jayvik-cybertool/
 │       └── components/
            ├── Navbar.jsx
            ├── PasswordAnalyzer.jsx
+           ├── PasswordGenerator.jsx
            ├── PortSimulator.jsx
            ├── HashDemo.jsx
            ├── CryptoLab.jsx
            ├── PhishingAnalyzer.jsx
+           ├── EmailHeaderAnalyzer.jsx
            ├── ReconPlanner.jsx
            ├── ThreatSimulator.jsx
            ├── NmapSimulator.jsx
@@ -57,6 +66,7 @@ jayvik-cybertool/
            ├── SslAnalyzer.jsx
            ├── SubdomainEnumerator.jsx
            ├── WhoisLookup.jsx
+           ├── SqlInjectionLab.jsx
            ├── LearnMode.jsx
            └── AboutPage.jsx
 └── README.md
@@ -91,6 +101,7 @@ npm run dev
 | `/`                    | GET    | Health check                                     |
 | **Password & Hashing** |        |                                                  |
 | `/password-strength`   | POST   | Analyze password strength                        |
+| `/password/generate`   | POST   | Generate strong random passwords                 |
 | `/hashes`              | POST   | Return MD5, SHA-1, and SHA-256                   |
 | **Encryption**         |        |                                                  |
 | `/encrypt/aes`         | POST   | AES encryption demo                              |
@@ -105,6 +116,9 @@ npm run dev
 | `/ssl/analyze`         | POST   | SSL/TLS certificate analysis (simulated)         |
 | `/subdomain/enumerate` | POST   | Subdomain discovery via wordlist (simulated)     |
 | `/whois/lookup`        | POST   | WHOIS domain lookup (simulated)                  |
+| **Email & Web Security**|       |                                                  |
+| `/email/analyze-headers` | POST | Email header analysis for spoofing detection   |
+| `/security/sql-injection-test` | POST | SQL injection vulnerability detection        |
 | **Analysis & Planning**|        |                                                  |
 | `/phishing/analyze`    | POST   | Heuristic phishing message analysis (simulation) |
 | `/recon/blueprint`     | POST   | Generate simulated recon checklist               |
@@ -142,10 +156,14 @@ This platform provides educational simulations of professional penetration testi
 
 ## ✅ Next Steps
 
-- Add backend unit tests (pytest)
-- Introduce gamified achievement tracking (localStorage)
-- Create Docker containers for full-stack deployment
-- Integrate ESLint/Prettier for consistent frontend style
+- Backend unit tests with pytest
+- Docker containers for full-stack deployment
+- Advanced web security labs (XSS, CSRF, XXE)
+- More OWASP vulnerabilities coverage
+- Mobile security concepts
+- Cloud security scenarios
+- API security testing
+- Community leaderboard (backend database required)
 
 ---
 
