@@ -7,8 +7,8 @@ FastAPI backend powering the Jayvik Labs cybersecurity educational tool. All fun
 ```bash
 python -m venv .venv
 .venv\Scripts\activate    # Windows
-# source .venv/bin/activate  # macOS/Linux
-pip install -r requirements.txt
+ource .venv/bin/activate  # macOS/Linux
+ pip install -r requirements.txt
 uvicorn app:app --reload --port 8000
 ```
 

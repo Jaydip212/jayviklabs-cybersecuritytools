@@ -433,3 +433,183 @@ def recon_blueprint(target: str):
             "Document findings responsibly and report securely."
         ]
     }
+
+# 9) NMAP SIMULATOR - Port scanning simulation
+def nmap_simulator(target: str, scan_type: str = "syn"):
+    """
+    Simulate nmap port scanning. Returns deterministic fictional ports based on target hash.
+    EDUCATIONAL ONLY - NO REAL SCANNING PERFORMED.
+    """
+    sanitized = target.strip() or "example.com"
+    target_hash = hashlib.sha256(sanitized.encode()).hexdigest()
+    seed_val = int(target_hash[:8], 16)
+    
+    common_ports = {
+        22: "ssh", 80: "http", 443: "https", 3306: "mysql", 5432: "postgresql",
+        3389: "rdp", 8080: "http-proxy", 8000: "http-alt", 445: "smb", 21: "ftp",
+        25: "smtp", 110: "pop3", 143: "imap", 53: "dns", 389: "ldap"
+    }
+    
+    selected_ports = []
+    for port in list(common_ports.keys())[:7]:
+        if (seed_val + port) % 3 == 0:
+            selected_ports.append(port)
+    
+    if not selected_ports:
+        selected_ports = [22, 80, 443]
+    
+    open_ports = [
+        {"port": p, "service": common_ports[p], "state": "open", "reason": "syn-ack"} 
+        for p in sorted(selected_ports)
+    ]
+    
+    return {
+        "target": sanitized,
+        "scan_type": scan_type,
+        "open_ports": open_ports,
+        "closed_ports": 65535 - len(open_ports),
+        "scan_time": "0.42s",
+        "disclaimer": "Simulated scan - NO real network traffic generated."
+    }
+
+# 10) DNS ENUMERATION
+def dns_enumeration(domain: str):
+    """
+    Simulate DNS record enumeration for educational purposes.
+    Returns common record types: A, AAAA, MX, TXT, NS, CNAME
+    """
+    sanitized = domain.strip() or "example.com"
+    domain_hash = hashlib.md5(sanitized.encode()).hexdigest()
+    
+    a_octets = [int(domain_hash[i:i+2], 16) % 255 for i in range(0, 8, 2)]
+    a_record = ".".join(str(o) for o in a_octets)
+    
+    aaaa_parts = [domain_hash[i:i+4] for i in range(0, 16, 4)]
+    aaaa_record = ":".join(aaaa_parts)
+    
+    return {
+        "domain": sanitized,
+        "records": {
+            "A": [{"value": a_record, "ttl": 3600}],
+            "AAAA": [{"value": f"2001:db8::{aaaa_parts[0]}", "ttl": 3600}],
+            "MX": [
+                {"priority": 10, "value": f"mail.{sanitized}", "ttl": 3600},
+                {"priority": 20, "value": f"mail2.{sanitized}", "ttl": 3600}
+            ],
+            "TXT": [
+                {"value": "v=spf1 include:_spf.google.com ~all", "ttl": 3600},
+                {"value": "google-site-verification=1a2b3c4d5e6f", "ttl": 3600}
+            ],
+            "NS": [
+                {"value": "ns1.example.com", "ttl": 172800},
+                {"value": "ns2.example.com", "ttl": 172800}
+            ]
+        },
+        "disclaimer": "Simulated DNS records - not querying real nameservers."
+    }
+
+# 11) SSL CERTIFICATE ANALYZER
+def ssl_analyzer(domain: str):
+    """
+    Simulate SSL/TLS certificate analysis. Returns fictional cert details.
+    """
+    sanitized = domain.strip() or "example.com"
+    cert_hash = hashlib.sha256(sanitized.encode()).hexdigest()
+    cert_serial = cert_hash[:16].upper()
+    
+    from datetime import datetime, timedelta
+    issued = datetime.now() - timedelta(days=365)
+    expires = datetime.now() + timedelta(days=365)
+    
+    return {
+        "domain": sanitized,
+        "certificate": {
+            "subject": f"CN={sanitized}",
+            "issuer": "Simulated CA",
+            "serial": cert_serial,
+            "signature_algorithm": "sha256WithRSAEncryption",
+            "public_key_bits": 2048,
+            "issued": issued.strftime("%Y-%m-%d"),
+            "expires": expires.strftime("%Y-%m-%d"),
+            "validity_days": 365,
+            "san": [sanitized, f"*.{sanitized}"],
+            "is_valid": True,
+            "is_wildcard": False
+        },
+        "tls_versions": ["TLSv1.2", "TLSv1.3"],
+        "cipher_suites": [
+            "TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384",
+            "TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256"
+        ],
+        "security_rating": "A+",
+        "disclaimer": "Simulated certificate - not connecting to real servers."
+    }
+
+# 12) SUBDOMAIN ENUMERATOR
+def subdomain_enumerator(domain: str):
+    """
+    Simulate subdomain enumeration via common wordlist.
+    Returns fictional subdomains based on domain hash.
+    """
+    sanitized = domain.strip() or "example.com"
+    domain_hash = hashlib.sha256(sanitized.encode()).hexdigest()
+    
+    common_subdomains = [
+        "www", "mail", "api", "admin", "dev", "staging", "test", "ftp", "cdn",
+        "backup", "db", "app", "blog", "shop", "support", "vpn", "ssh", "ns1",
+        "ns2", "mx", "mail1", "mail2", "pop", "smtp", "imap", "webmail"
+    ]
+    
+    found = []
+    for i, sub in enumerate(common_subdomains):
+        if (int(domain_hash[:8], 16) + i) % 3 == 0:
+            found.append({
+                "subdomain": f"{sub}.{sanitized}",
+                "ip": f"192.168.{(i+1)}.{(i*10) % 255}",
+                "resolved": True
+            })
+    
+    if not found:
+        found = [{"subdomain": f"www.{sanitized}", "ip": "192.168.1.1", "resolved": True}]
+    
+    return {
+        "domain": sanitized,
+        "subdomains_found": len(found),
+        "subdomains": sorted(found, key=lambda x: x["subdomain"]),
+        "disclaimer": "Simulated enumeration - no real brute-force or queries performed."
+    }
+
+# 13) WHOIS LOOKUP
+def whois_lookup(domain: str):
+    """
+    Simulate WHOIS domain lookup with fictional registrar info.
+    """
+    sanitized = domain.strip() or "example.com"
+    domain_hash = hashlib.md5(sanitized.encode()).hexdigest()
+    
+    registrars = ["GoDaddy", "NameCheap", "AWS Route53", "CloudFlare", "Verisign"]
+    reg_idx = int(domain_hash[:8], 16) % len(registrars)
+    
+    from datetime import datetime, timedelta
+    created = datetime.now() - timedelta(days=1095)
+    expires = datetime.now() + timedelta(days=180)
+    
+    return {
+        "domain": sanitized,
+        "registrar": registrars[reg_idx],
+        "registrant": {
+            "name": "Registrant Name",
+            "email": f"admin@{sanitized}",
+            "country": "US"
+        },
+        "created_date": created.strftime("%Y-%m-%d"),
+        "expiry_date": expires.strftime("%Y-%m-%d"),
+        "updated_date": (datetime.now() - timedelta(days=30)).strftime("%Y-%m-%d"),
+        "name_servers": [
+            f"ns1.example.com",
+            f"ns2.example.com"
+        ],
+        "dnssec": "signed",
+        "status": "ok",
+        "disclaimer": "Simulated WHOIS data - not querying real WHOIS servers."
+    }

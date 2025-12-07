@@ -12,7 +12,12 @@ from utils import (
     base64_encode_decode,
     simulated_port_scan,
     phishing_analyzer,
-    recon_blueprint
+    recon_blueprint,
+    nmap_simulator,
+    dns_enumeration,
+    ssl_analyzer,
+    subdomain_enumerator,
+    whois_lookup
 )
 
 app = FastAPI(title="Jayvik Labs — Cybersecurity Edu API")
@@ -115,3 +120,28 @@ def simulated_network():
             {"ip": "192.168.100.40", "hostname": "database", "open_ports": [3306, 5432]}
         ]
     }
+
+@app.post('/nmap/scan')
+def nmap_scan(payload: Dict):
+    """Simulate nmap port scanning (educational only)."""
+    return nmap_simulator(payload.get('target', 'example.com'), payload.get('scan_type', 'syn'))
+
+@app.post('/dns/enumerate')
+def dns_enum(payload: Dict):
+    """Simulate DNS record enumeration (educational only)."""
+    return dns_enumeration(payload.get('domain', 'example.com'))
+
+@app.post('/ssl/analyze')
+def ssl_check(payload: Dict):
+    """Simulate SSL/TLS certificate analysis (educational only)."""
+    return ssl_analyzer(payload.get('domain', 'example.com'))
+
+@app.post('/subdomain/enumerate')
+def subdomain_enum(payload: Dict):
+    """Simulate subdomain enumeration (educational only)."""
+    return subdomain_enumerator(payload.get('domain', 'example.com'))
+
+@app.post('/whois/lookup')
+def whois_check(payload: Dict):
+    """Simulate WHOIS domain lookup (educational only)."""
+    return whois_lookup(payload.get('domain', 'example.com'))
