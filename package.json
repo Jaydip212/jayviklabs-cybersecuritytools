@@ -1,0 +1,11 @@
+{
+  "name": "jayvik-labs-cybersecurity-tool",
+  "version": "1.0.0",
+  "description": "Interactive cybersecurity educational platform",
+  "scripts": {
+    "build": "cd frontend && npm install && npm run build",
+    "start": "cd frontend && npm run preview"
+  },
+  "dependencies": {},
+  "devDependencies": {}
+}
