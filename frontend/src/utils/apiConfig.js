@@ -19,3 +19,7 @@ export const API_URL = (() => {
 
   return 'http://localhost:8000'
 })()
+
+// Export as both names for compatibility
+export const apiBaseURL = API_URL
+export default API_URL
