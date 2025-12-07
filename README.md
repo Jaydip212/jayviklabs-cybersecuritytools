@@ -2,12 +2,13 @@
 
 An interactive learning platform combining a React (Vite) frontend with a Python FastAPI backend. Everything runs locally and simulates cybersecurity concepts in a safe, legal environment — **no real networks or systems are touched.**
 
-## ✨ Features (15 Interactive Tools)
+## ✨ Features (18 Interactive Tools)
 
 ### 🔐 Core Security Tools
 - **Password Strength Analyzer** — Provides score, strength, and best-practice suggestions
 - **Password Generator** — Create cryptographically strong passwords with custom rules
 - **Hashing Demonstrator** — MD5, SHA-1, and SHA-256 with security notes
+- **Hashing Cracker** — Rainbow table simulator with common password wordlist
 - **Encryption & Encoding Lab** — AES encryption/decryption, Caesar cipher, Base64
 
 ### 🔍 Network & Domain Tools
@@ -22,10 +23,14 @@ An interactive learning platform combining a React (Vite) frontend with a Python
 - **Phishing Email Analyzer** — Spot social engineering red flags safely
 - **Email Header Analyzer** — Detect spoofing, authentication issues, and phishing indicators
 - **SQL Injection Lab** — Interactive SQL injection vulnerability detection and prevention
+- **Steganography Tool** — Hide/reveal text in images using LSB encoding (educational)
+
+### 🛡️ Vulnerability & Threat Analysis
+- **Vulnerability Scanner** — CVE lookup simulator with severity ratings and remediation
+- **Threat Detection Simulator** — Quiz-style incident response scenarios
 - **Recon Blueprint Planner** — Generate ethical recon checklists for penetration testing
 
 ### 📚 Learning & Awareness
-- **Threat Detection Simulator** — Quiz-style incident response scenarios
 - **Learn Mode** — OWASP Top 10 reference grid with interactive quiz
 - **About Page** — Meet founder Jaydip Jadhav and learn about Jayvik Labs' ethical hacking mission
 
@@ -56,6 +61,7 @@ jayvik-cybertool/
            ├── PasswordGenerator.jsx
            ├── PortSimulator.jsx
            ├── HashDemo.jsx
+           ├── HashingCracker.jsx
            ├── CryptoLab.jsx
            ├── PhishingAnalyzer.jsx
            ├── EmailHeaderAnalyzer.jsx
@@ -67,6 +73,8 @@ jayvik-cybertool/
            ├── SubdomainEnumerator.jsx
            ├── WhoisLookup.jsx
            ├── SqlInjectionLab.jsx
+           ├── SteganographyTool.jsx
+           ├── VulnerabilityScanner.jsx
            ├── LearnMode.jsx
            └── AboutPage.jsx
 └── README.md
@@ -103,6 +111,7 @@ npm run dev
 | `/password-strength`   | POST   | Analyze password strength                        |
 | `/password/generate`   | POST   | Generate strong random passwords                 |
 | `/hashes`              | POST   | Return MD5, SHA-1, and SHA-256                   |
+| `/hashes/crack`        | POST   | Crack hash using rainbow table simulator         |
 | **Encryption**         |        |                                                  |
 | `/encrypt/aes`         | POST   | AES encryption demo                              |
 | `/decrypt/aes`         | POST   | AES decryption demo                              |
@@ -119,6 +128,11 @@ npm run dev
 | **Email & Web Security**|       |                                                  |
 | `/email/analyze-headers` | POST | Email header analysis for spoofing detection   |
 | `/security/sql-injection-test` | POST | SQL injection vulnerability detection        |
+| **Steganography**      |        |                                                  |
+| `/steganography/encode` | POST  | Hide text in image using LSB encoding           |
+| `/steganography/decode` | POST  | Extract hidden text from image                  |
+| **Vulnerability Scanning**|     |                                                  |
+| `/vulnerabilities/scan` | POST  | CVE lookup with severity ratings                |
 | **Analysis & Planning**|        |                                                  |
 | `/phishing/analyze`    | POST   | Heuristic phishing message analysis (simulation) |
 | `/recon/blueprint`     | POST   | Generate simulated recon checklist               |

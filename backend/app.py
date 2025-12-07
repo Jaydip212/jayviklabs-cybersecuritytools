@@ -20,7 +20,11 @@ from utils import (
     whois_lookup,
     password_generator,
     email_header_analyzer,
-    sql_injection_simulator
+    sql_injection_simulator,
+    encode_text_in_image,
+    decode_text_from_image,
+    hash_cracker,
+    cve_lookup
 )
 
 app = FastAPI(title="Jayvik Labs — Cybersecurity Edu API")
@@ -171,4 +175,33 @@ def test_sql_injection(payload: Dict):
     return sql_injection_simulator(
         payload.get('input', ''),
         payload.get('query_type', 'login')
+    )
+
+@app.post('/steganography/encode')
+def encode_stego(payload: Dict):
+    """Hide text in image using LSB steganography (educational)."""
+    return encode_text_in_image(
+        payload.get('image', ''),
+        payload.get('text', '')
+    )
+
+@app.post('/steganography/decode')
+def decode_stego(payload: Dict):
+    """Extract hidden text from steganographic image."""
+    return decode_text_from_image(payload.get('image', ''))
+
+@app.post('/hashes/crack')
+def crack_hash(payload: Dict):
+    """Attempt to crack hash using rainbow table (educational)."""
+    return hash_cracker(
+        payload.get('hash', ''),
+        payload.get('hash_type', 'md5')
+    )
+
+@app.post('/vulnerabilities/scan')
+def scan_vulnerabilities(payload: Dict):
+    """Look up known CVEs for software (simulated database)."""
+    return cve_lookup(
+        payload.get('software', ''),
+        payload.get('version', None)
     )

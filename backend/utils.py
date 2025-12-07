@@ -614,6 +614,255 @@ def whois_lookup(domain: str):
         "disclaimer": "Simulated WHOIS data - not querying real WHOIS servers."
     }
 
+# 17) Steganography - Hide/Reveal text in images (LSB)
+def encode_text_in_image(image_data_b64: str, text: str) -> dict:
+    """
+    Encode text into image using Least Significant Bit (LSB) steganography.
+    Educational demonstration - not for production use.
+    """
+    try:
+        from PIL import Image
+        import io
+        
+        # Decode base64 image
+        image_bytes = base64.b64decode(image_data_b64.split(',')[1] if ',' in image_data_b64 else image_data_b64)
+        img = Image.open(io.BytesIO(image_bytes)).convert('RGB')
+        
+        # Convert text to binary
+        text_bytes = text.encode('utf-8')
+        text_binary = ''.join(format(byte, '08b') for byte in text_bytes)
+        
+        # Add length header (32 bits)
+        length_binary = format(len(text_bytes), '032b')
+        full_binary = length_binary + text_binary
+        
+        if len(full_binary) > img.width * img.height * 3:
+            return {"error": "Text too long for this image"}
+        
+        # Encode into LSB
+        pixels = img.load()
+        bit_index = 0
+        
+        for y in range(img.height):
+            for x in range(img.width):
+                if bit_index >= len(full_binary):
+                    break
+                r, g, b = pixels[x, y][:3]
+                
+                # Modify LSB of R channel
+                if bit_index < len(full_binary):
+                    r = (r & 0xFE) | int(full_binary[bit_index])
+                    bit_index += 1
+                
+                pixels[x, y] = (r, g, b)
+        
+        # Convert back to base64
+        output = io.BytesIO()
+        img.save(output, format='PNG')
+        encoded = base64.b64encode(output.getvalue()).decode()
+        
+        return {
+            "success": True,
+            "encoded_image": f"data:image/png;base64,{encoded}",
+            "text_length": len(text),
+            "capacity": img.width * img.height * 3,
+            "message": f"Text successfully hidden in image! ({len(text)} bytes encoded)"
+        }
+    except Exception as e:
+        return {"error": f"Encoding failed: {str(e)}"}
+
+def decode_text_from_image(image_data_b64: str) -> dict:
+    """
+    Decode hidden text from steganographic image (LSB).
+    """
+    try:
+        from PIL import Image
+        import io
+        
+        # Decode base64 image
+        image_bytes = base64.b64decode(image_data_b64.split(',')[1] if ',' in image_data_b64 else image_data_b64)
+        img = Image.open(io.BytesIO(image_bytes)).convert('RGB')
+        
+        # Extract binary data
+        pixels = img.load()
+        binary_str = ''
+        
+        for y in range(img.height):
+            for x in range(img.width):
+                r, g, b = pixels[x, y][:3]
+                binary_str += str(r & 1)  # Get LSB
+        
+        # Extract length (first 32 bits)
+        if len(binary_str) < 32:
+            return {"error": "Image too small or no hidden data"}
+        
+        length = int(binary_str[:32], 2)
+        text_binary = binary_str[32:32 + length * 8]
+        
+        if len(text_binary) < length * 8:
+            return {"error": "Incomplete or corrupted hidden data"}
+        
+        # Convert binary to text
+        decoded_text = ''.join(
+            chr(int(text_binary[i:i+8], 2)) 
+            for i in range(0, len(text_binary), 8)
+        )
+        
+        return {
+            "success": True,
+            "hidden_text": decoded_text,
+            "text_length": length,
+            "message": f"Successfully extracted {length} bytes of hidden text!"
+        }
+    except Exception as e:
+        return {"error": f"Decoding failed: {str(e)}"}
+
+# 18) Hashing Cracker - Rainbow table simulator
+COMMON_PASSWORD_LIST = [
+    "password", "123456", "12345678", "qwerty", "abc123", "monkey", "letmein",
+    "trustno1", "dragon", "baseball", "111111", "iloveyou", "master", "sunshine",
+    "ashley", "bailey", "passw0rd", "shadow", "123123", "654321", "superman",
+    "qazwsx", "michael", "football", "welcome", "jesus", "ninja", "mustang",
+    "password123", "admin", "letmein", "princess", "qwerty123", "freedom",
+    "whatever", "solo", "starwars", "batman", "cheater", "harley", "jordan",
+    "hotmail", "passpass", "pass123", "pass", "pass1", "pass@123"
+]
+
+def hash_cracker(hash_value: str, hash_type: str) -> dict:
+    """
+    Attempt to crack hash using rainbow table (educational simulation).
+    Returns password if found, attempts count, and time estimate.
+    """
+    hash_value = hash_value.lower().strip()
+    hash_type = hash_type.lower()
+    
+    if hash_type not in ['md5', 'sha1', 'sha256']:
+        return {"error": f"Unsupported hash type: {hash_type}"}
+    
+    # Hash function selector
+    if hash_type == 'md5':
+        hash_func = lambda x: hashlib.md5(x.encode()).hexdigest()
+    elif hash_type == 'sha1':
+        hash_func = lambda x: hashlib.sha1(x.encode()).hexdigest()
+    else:
+        hash_func = lambda x: hashlib.sha256(x.encode()).hexdigest()
+    
+    attempts = 0
+    for password in COMMON_PASSWORD_LIST:
+        attempts += 1
+        if hash_func(password) == hash_value:
+            return {
+                "success": True,
+                "found": True,
+                "password": password,
+                "attempts": attempts,
+                "time_estimate": f"{attempts * 0.001:.3f} seconds",
+                "message": f"✓ Password cracked in {attempts} attempts!"
+            }
+    
+    return {
+        "success": True,
+        "found": False,
+        "attempts": len(COMMON_PASSWORD_LIST),
+        "time_estimate": f"{len(COMMON_PASSWORD_LIST) * 0.001:.3f} seconds",
+        "message": f"Password not found in rainbow table ({len(COMMON_PASSWORD_LIST)} passwords tested)",
+        "tip": "Try a longer or more complex password - stronger passwords take exponentially longer to crack!"
+    }
+
+# 19) CVE Vulnerability Scanner - Simulated lookup
+CVE_DATABASE = {
+    "apache httpd": {
+        "2.4.49": [
+            {"id": "CVE-2021-41773", "cvss": 7.5, "severity": "high", "description": "Path traversal vulnerability in mod_proxy", "remediation": "Upgrade to 2.4.50 or apply patch"},
+            {"id": "CVE-2021-42013", "cvss": 7.5, "severity": "high", "description": "Path traversal in mod_proxy", "remediation": "Apply security update"}
+        ],
+        "2.4.41": [
+            {"id": "CVE-2021-33193", "cvss": 7.5, "severity": "high", "description": "HTTP request smuggling", "remediation": "Upgrade to 2.4.48"}
+        ]
+    },
+    "openssl": {
+        "1.0.2": [
+            {"id": "CVE-2016-2183", "cvss": 6.5, "severity": "medium", "description": "SWEET32 attack - weak encryption", "remediation": "Disable 3DES or upgrade"},
+            {"id": "CVE-2019-1010023", "cvss": 5.3, "severity": "medium", "description": "Side-channel attack", "remediation": "Upgrade to 1.0.2u"}
+        ],
+        "1.1.1": [
+            {"id": "CVE-2021-3711", "cvss": 8.1, "severity": "high", "description": "Out-of-bounds read in X.509", "remediation": "Upgrade to 1.1.1k"}
+        ]
+    },
+    "mysql": {
+        "5.7.10": [
+            {"id": "CVE-2016-2047", "cvss": 6.7, "severity": "medium", "description": "Authentication bypass", "remediation": "Upgrade to 5.7.11"},
+            {"id": "CVE-2015-3152", "cvss": 5.1, "severity": "medium", "description": "SSL negotiation flaw", "remediation": "Apply patch"}
+        ],
+        "8.0.0": [
+            {"id": "CVE-2021-2154", "cvss": 8.8, "severity": "high", "description": "SQL injection in prepared statements", "remediation": "Upgrade to 8.0.23"}
+        ]
+    },
+    "wordpress": {
+        "5.0": [
+            {"id": "CVE-2019-6340", "cvss": 7.2, "severity": "high", "description": "Unauthenticated REST API access", "remediation": "Upgrade to 5.1.1"}
+        ],
+        "5.7": [
+            {"id": "CVE-2021-24487", "cvss": 6.5, "severity": "medium", "description": "Stored XSS in comments", "remediation": "Upgrade to 5.7.2"}
+        ]
+    },
+    "django": {
+        "2.2": [
+            {"id": "CVE-2021-33571", "cvss": 6.5, "severity": "medium", "description": "Potential SQL injection via QuerySet.order_by", "remediation": "Upgrade to 2.2.20"},
+            {"id": "CVE-2020-9402", "cvss": 5.3, "severity": "medium", "description": "SQL injection in GIS functions", "remediation": "Apply patch"}
+        ],
+        "3.2": [
+            {"id": "CVE-2021-44716", "cvss": 7.5, "severity": "high", "description": "Denial of service via HTTP", "remediation": "Upgrade to 3.2.10"}
+        ]
+    }
+}
+
+def cve_lookup(software_name: str, version: str = None) -> dict:
+    """
+    Look up known CVEs for software (simulated database).
+    Educational - uses fictional but realistic data.
+    """
+    software_name = software_name.lower().strip()
+    
+    if software_name not in CVE_DATABASE:
+        return {
+            "found": False,
+            "software": software_name,
+            "message": f"No CVEs found in database for '{software_name}'",
+            "suggestion": "Try: apache httpd, openssl, mysql, wordpress, django"
+        }
+    
+    db = CVE_DATABASE[software_name]
+    
+    if version and version not in db:
+        return {
+            "found": False,
+            "software": software_name,
+            "version": version,
+            "message": f"No CVEs found for version {version}",
+            "available_versions": list(db.keys())
+        }
+    
+    results = []
+    if version:
+        results = db[version]
+    else:
+        # Return all CVEs for software
+        for v in db.values():
+            results.extend(v)
+    
+    # Sort by CVSS score
+    results = sorted(results, key=lambda x: x['cvss'], reverse=True)
+    
+    return {
+        "found": True,
+        "software": software_name,
+        "version": version if version else "all",
+        "total_cves": len(results),
+        "cves": results,
+        "risk_level": "CRITICAL" if any(cve['cvss'] >= 9 for cve in results) else "HIGH" if any(cve['cvss'] >= 7 for cve in results) else "MEDIUM"
+    }
+
 # 14) PASSWORD GENERATOR
 def password_generator(length: int = 16, include_symbols: bool = True, include_numbers: bool = True, include_uppercase: bool = True, include_lowercase: bool = True):
     """

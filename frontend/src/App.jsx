@@ -16,6 +16,9 @@ import WhoisLookup from './components/WhoisLookup'
 import PasswordGenerator from './components/PasswordGenerator'
 import EmailHeaderAnalyzer from './components/EmailHeaderAnalyzer'
 import SqlInjectionLab from './components/SqlInjectionLab'
+import SteganographyTool from './components/SteganographyTool'
+import HashingCracker from './components/HashingCracker'
+import VulnerabilityScanner from './components/VulnerabilityScanner'
 import AboutPage from './components/AboutPage'
 
 export default function App(){
@@ -56,7 +59,7 @@ export default function App(){
               <span className="metric-label">Safe Training</span>
             </div>
             <div className="metric-card">
-              <span className="metric-value">15 Labs</span>
+              <span className="metric-value">18 Labs</span>
               <span className="metric-label">Interactive Modules</span>
             </div>
             <div className="metric-card">
@@ -86,6 +89,9 @@ export default function App(){
           <PasswordGenerator />
           <EmailHeaderAnalyzer />
           <SqlInjectionLab />
+          <SteganographyTool />
+          <HashingCracker />
+          <VulnerabilityScanner />
         </div>
 
         <section id="testimonials" className="testimonials">
