@@ -613,3 +613,167 @@ def whois_lookup(domain: str):
         "status": "ok",
         "disclaimer": "Simulated WHOIS data - not querying real WHOIS servers."
     }
+
+# 14) PASSWORD GENERATOR
+def password_generator(length: int = 16, include_symbols: bool = True, include_numbers: bool = True, include_uppercase: bool = True, include_lowercase: bool = True):
+    """
+    Generate strong random passwords with customizable rules.
+    """
+    import string
+    characters = ""
+    
+    if include_lowercase:
+        characters += string.ascii_lowercase
+    if include_uppercase:
+        characters += string.ascii_uppercase
+    if include_numbers:
+        characters += string.digits
+    if include_symbols:
+        characters += "!@#$%^&*()_+-=[]{}|;:,.<>?"
+    
+    if not characters:
+        characters = string.ascii_letters + string.digits
+    
+    length = max(8, min(length, 128))  # Enforce 8-128 character range
+    password = "".join(secrets.choice(characters) for _ in range(length))
+    
+    strength = "Strong"
+    if length < 12:
+        strength = "Medium"
+    elif length < 8:
+        strength = "Weak"
+    
+    return {
+        "password": password,
+        "length": length,
+        "strength": strength,
+        "entropy_bits": length * 5.7,
+        "includes": {
+            "lowercase": include_lowercase,
+            "uppercase": include_uppercase,
+            "numbers": include_numbers,
+            "symbols": include_symbols
+        },
+        "tips": [
+            "Use unique passwords for each account",
+            "Avoid personal information (names, birthdates)",
+            "Consider using a password manager",
+            "Enable two-factor authentication when possible"
+        ]
+    }
+
+# 15) EMAIL HEADER ANALYZER
+def email_header_analyzer(headers: str):
+    """
+    Analyze email headers for spoofing, authentication, and security issues.
+    Educational tool for identifying phishing and email security problems.
+    """
+    lines = headers.strip().split('\n')
+    header_dict = {}
+    
+    for line in lines:
+        if ':' in line:
+            key, val = line.split(':', 1)
+            header_dict[key.strip()] = val.strip()
+    
+    issues = []
+    warnings = []
+    info = []
+    
+    # Check for missing authentication headers
+    if 'Authentication-Results' not in header_dict and 'DKIM-Signature' not in header_dict:
+        issues.append("No SPF, DKIM, or DMARC authentication detected - high spoofing risk")
+    
+    if 'Return-Path' not in header_dict:
+        issues.append("Missing Return-Path header - may indicate forwarding")
+    
+    # Check for suspicious patterns
+    from_addr = header_dict.get('From', '')
+    if 'noreply' in from_addr.lower() or 'no-reply' in from_addr.lower():
+        info.append("Message from automated system (noreply)")
+    
+    # Check for multiple hops
+    received_count = sum(1 for k in header_dict if k.lower() == 'received')
+    if received_count > 3:
+        warnings.append(f"Message went through {received_count} mail servers - verify legitimacy")
+    
+    # Check for encryption
+    if 'TLS' not in header_dict.get('Received', ''):
+        warnings.append("Email may not be encrypted in transit")
+    
+    return {
+        "from": header_dict.get('From', 'Unknown'),
+        "to": header_dict.get('To', 'Unknown'),
+        "subject": header_dict.get('Subject', 'Unknown'),
+        "date": header_dict.get('Date', 'Unknown'),
+        "received_count": received_count,
+        "authentication": {
+            "spf": "SPF-Signature" in header_dict,
+            "dkim": "DKIM-Signature" in header_dict,
+            "dmarc": "Authentication-Results" in header_dict
+        },
+        "issues": issues,
+        "warnings": warnings,
+        "info": info,
+        "risk_level": "high" if issues else ("medium" if warnings else "low"),
+        "raw_headers": header_dict,
+        "disclaimer": "Educational analysis only - not official email security validation."
+    }
+
+# 16) SQL INJECTION SIMULATOR
+def sql_injection_simulator(user_input: str, query_type: str = "login"):
+    """
+    Simulate SQL injection vulnerability detection and exploitation.
+    Educational tool to show how SQL injection works and how to prevent it.
+    """
+    
+    # Detect common SQL injection patterns
+    injection_patterns = [
+        (r"'\s*or\s*'1'\s*=\s*'1", "Classic OR-based injection"),
+        (r"'\s*or\s*1\s*=\s*1", "Numeric OR injection"),
+        (r"';\s*DROP", "DROP statement injection"),
+        (r"';\s*DELETE", "DELETE statement injection"),
+        (r"';\s*UPDATE", "UPDATE statement injection"),
+        (r"'\s*UNION\s*SELECT", "UNION-based injection"),
+        (r"';\s*INSERT", "INSERT statement injection"),
+        (r"--\s*", "SQL comment injection"),
+        (r"/\*.*\*/", "Multi-line comment injection"),
+        (r"xp_", "Extended stored procedure call"),
+        (r"sp_", "Stored procedure call"),
+        (r"exec|execute", "Dynamic code execution")
+    ]
+    
+    detected_attacks = []
+    for pattern, attack_name in injection_patterns:
+        if re.search(pattern, user_input, re.IGNORECASE):
+            detected_attacks.append(attack_name)
+    
+    # Simulate vulnerable query construction
+    if query_type == "login":
+        vulnerable_query = f"SELECT * FROM users WHERE username = '{user_input}'"
+    else:
+        vulnerable_query = f"SELECT * FROM users WHERE email = '{user_input}'"
+    
+    # Simulate safe query (parameterized)
+    safe_query = "SELECT * FROM users WHERE username = ?" if query_type == "login" else "SELECT * FROM users WHERE email = ?"
+    
+    success = len(detected_attacks) > 0
+    
+    return {
+        "input": user_input,
+        "is_vulnerable": success,
+        "attacks_detected": detected_attacks,
+        "vulnerable_query": vulnerable_query,
+        "safe_query": safe_query,
+        "prevention_tips": [
+            "Use parameterized queries / prepared statements",
+            "Validate and sanitize all user inputs",
+            "Use ORM frameworks (SQLAlchemy, Sequelize, etc.)",
+            "Apply principle of least privilege to database users",
+            "Enable SQL error suppression in production",
+            "Use Web Application Firewalls (WAF)",
+            "Perform regular security testing and code reviews"
+        ],
+        "severity": "Critical" if success else "None",
+        "disclaimer": "Educational simulation - not actual SQL injection testing."
+    }

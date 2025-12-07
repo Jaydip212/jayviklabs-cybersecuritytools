@@ -17,7 +17,10 @@ from utils import (
     dns_enumeration,
     ssl_analyzer,
     subdomain_enumerator,
-    whois_lookup
+    whois_lookup,
+    password_generator,
+    email_header_analyzer,
+    sql_injection_simulator
 )
 
 app = FastAPI(title="Jayvik Labs — Cybersecurity Edu API")
@@ -145,3 +148,27 @@ def subdomain_enum(payload: Dict):
 def whois_check(payload: Dict):
     """Simulate WHOIS domain lookup (educational only)."""
     return whois_lookup(payload.get('domain', 'example.com'))
+
+@app.post('/password/generate')
+def generate_password(payload: Dict):
+    """Generate strong random passwords with customizable rules."""
+    return password_generator(
+        length=payload.get('length', 16),
+        include_symbols=payload.get('include_symbols', True),
+        include_numbers=payload.get('include_numbers', True),
+        include_uppercase=payload.get('include_uppercase', True),
+        include_lowercase=payload.get('include_lowercase', True)
+    )
+
+@app.post('/email/analyze-headers')
+def analyze_email_headers(payload: Dict):
+    """Analyze email headers for spoofing and security issues (educational)."""
+    return email_header_analyzer(payload.get('headers', ''))
+
+@app.post('/security/sql-injection-test')
+def test_sql_injection(payload: Dict):
+    """Simulate SQL injection vulnerability detection (educational)."""
+    return sql_injection_simulator(
+        payload.get('input', ''),
+        payload.get('query_type', 'login')
+    )
