@@ -2,7 +2,7 @@
 
 An interactive learning platform combining a React (Vite) frontend with a Python FastAPI backend. Everything runs locally and simulates cybersecurity concepts in a safe, legal environment — **no real networks or systems are touched.**
 
-## ✨ Features (18 Interactive Tools)
+## ✨ Features (22 Interactive Tools)
 
 ### 🔐 Core Security Tools
 - **Password Strength Analyzer** — Provides score, strength, and best-practice suggestions
@@ -24,6 +24,10 @@ An interactive learning platform combining a React (Vite) frontend with a Python
 - **Email Header Analyzer** — Detect spoofing, authentication issues, and phishing indicators
 - **SQL Injection Lab** — Interactive SQL injection vulnerability detection and prevention
 - **Steganography Tool** — Hide/reveal text in images using LSB encoding (educational)
+- **XSS Vulnerability Tester** — Detect XSS attack patterns with severity ratings and prevention tips
+- **Brute Force Password Simulator** — Dictionary, brute force, and hybrid attack simulations
+- **Mobile Security Checker** — Android/iOS security audit with OWASP Mobile Top 10 mapping
+- **API Security Analyzer** — Endpoint security analysis with OWASP API Security Top 10 (2023)
 
 ### 🛡️ Vulnerability & Threat Analysis
 - **Vulnerability Scanner** — CVE lookup simulator with severity ratings and remediation
@@ -75,6 +79,10 @@ jayvik-cybertool/
            ├── SqlInjectionLab.jsx
            ├── SteganographyTool.jsx
            ├── VulnerabilityScanner.jsx
+           ├── XssTester.jsx
+           ├── BruteForceSimulator.jsx
+           ├── MobileSecurityChecker.jsx
+           ├── ApiSecurityAnalyzer.jsx
            ├── LearnMode.jsx
            └── AboutPage.jsx
 └── README.md
@@ -133,6 +141,10 @@ npm run dev
 | `/steganography/decode` | POST  | Extract hidden text from image                  |
 | **Vulnerability Scanning**|     |                                                  |
 | `/vulnerabilities/scan` | POST  | CVE lookup with severity ratings                |
+| `/security/xss-test`   | POST   | XSS vulnerability detection with severity analysis|
+| `/security/brute-force`| POST   | Password cracking simulation (dictionary/brute/hybrid)|
+| `/mobile/security-check`| POST  | Mobile app security audit (Android/iOS)         |
+| `/api/security-analyze`| POST   | API endpoint security analysis with OWASP mapping|
 | **Analysis & Planning**|        |                                                  |
 | `/phishing/analyze`    | POST   | Heuristic phishing message analysis (simulation) |
 | `/recon/blueprint`     | POST   | Generate simulated recon checklist               |

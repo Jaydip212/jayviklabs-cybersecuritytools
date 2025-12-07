@@ -19,6 +19,10 @@ import SqlInjectionLab from './components/SqlInjectionLab'
 import SteganographyTool from './components/SteganographyTool'
 import HashingCracker from './components/HashingCracker'
 import VulnerabilityScanner from './components/VulnerabilityScanner'
+import XssTester from './components/XssTester'
+import BruteForceSimulator from './components/BruteForceSimulator'
+import MobileSecurityChecker from './components/MobileSecurityChecker'
+import ApiSecurityAnalyzer from './components/ApiSecurityAnalyzer'
 import AboutPage from './components/AboutPage'
 
 export default function App(){
@@ -59,7 +63,7 @@ export default function App(){
               <span className="metric-label">Safe Training</span>
             </div>
             <div className="metric-card">
-              <span className="metric-value">18 Labs</span>
+              <span className="metric-value">22 Labs</span>
               <span className="metric-label">Interactive Modules</span>
             </div>
             <div className="metric-card">
@@ -92,6 +96,10 @@ export default function App(){
           <SteganographyTool />
           <HashingCracker />
           <VulnerabilityScanner />
+          <XssTester />
+          <BruteForceSimulator />
+          <MobileSecurityChecker />
+          <ApiSecurityAnalyzer />
         </div>
 
         <section id="testimonials" className="testimonials">

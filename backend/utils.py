@@ -1026,3 +1026,452 @@ def sql_injection_simulator(user_input: str, query_type: str = "login"):
         "severity": "Critical" if success else "None",
         "disclaimer": "Educational simulation - not actual SQL injection testing."
     }
+
+# 20) XSS VULNERABILITY TESTER
+def xss_vulnerability_tester(user_input: str, context: str = "html") -> dict:
+    """
+    Test for Cross-Site Scripting (XSS) vulnerabilities.
+    Detects common XSS attack patterns and provides prevention guidance.
+    """
+    
+    xss_patterns = [
+        (r"<script[^>]*>.*?</script>", "Script tag injection", "critical"),
+        (r"javascript:", "JavaScript protocol handler", "high"),
+        (r"on\w+\s*=", "Event handler injection (onclick, onerror, etc.)", "high"),
+        (r"<iframe[^>]*>", "Iframe injection", "high"),
+        (r"<img[^>]*onerror", "Image onerror injection", "high"),
+        (r"<svg[^>]*onload", "SVG onload injection", "high"),
+        (r"<object[^>]*>", "Object tag injection", "medium"),
+        (r"<embed[^>]*>", "Embed tag injection", "medium"),
+        (r"data:text/html", "Data URI injection", "medium"),
+        (r"vbscript:", "VBScript protocol", "medium"),
+        (r"<base[^>]*>", "Base tag injection", "medium"),
+        (r"<meta[^>]*http-equiv", "Meta refresh injection", "low")
+    ]
+    
+    detected_attacks = []
+    max_severity = "none"
+    
+    for pattern, attack_name, severity in xss_patterns:
+        if re.search(pattern, user_input, re.IGNORECASE):
+            detected_attacks.append({
+                "type": attack_name,
+                "severity": severity,
+                "pattern": pattern
+            })
+            if severity == "critical":
+                max_severity = "critical"
+            elif severity == "high" and max_severity != "critical":
+                max_severity = "high"
+            elif severity == "medium" and max_severity not in ["critical", "high"]:
+                max_severity = "medium"
+    
+    # Simulate vulnerable output
+    vulnerable_output = user_input
+    
+    # Simulate safe output (HTML entity encoding)
+    safe_output = user_input.replace("<", "&lt;").replace(">", "&gt;").replace("\"", "&quot;").replace("'", "&#x27;").replace("/", "&#x2F;")
+    
+    is_vulnerable = len(detected_attacks) > 0
+    
+    return {
+        "input": user_input,
+        "is_vulnerable": is_vulnerable,
+        "severity": max_severity if is_vulnerable else "none",
+        "attacks_detected": detected_attacks,
+        "attack_count": len(detected_attacks),
+        "vulnerable_output": vulnerable_output,
+        "safe_output": safe_output,
+        "prevention_tips": [
+            "HTML entity encode all user inputs before rendering",
+            "Use Content Security Policy (CSP) headers",
+            "Validate and sanitize inputs on server-side",
+            "Use modern frameworks with auto-escaping (React, Vue, Angular)",
+            "Never use innerHTML, use textContent instead",
+            "Set HttpOnly flag on cookies",
+            "Implement X-XSS-Protection header"
+        ],
+        "xss_types": {
+            "reflected": "User input directly reflected in response",
+            "stored": "Malicious input saved and displayed to other users",
+            "dom_based": "Client-side JavaScript vulnerability"
+        },
+        "disclaimer": "Educational simulation - sanitized output shown for safety."
+    }
+
+# 21) BRUTE FORCE PASSWORD SIMULATOR
+def brute_force_simulator(target_password: str, attack_mode: str = "dictionary") -> dict:
+    """
+    Simulate brute force password cracking attacks.
+    Shows how different attack modes work and time estimates.
+    """
+    
+    # Common wordlists for dictionary attack
+    common_passwords = [
+        "password", "123456", "12345678", "qwerty", "abc123", "monkey", "letmein",
+        "welcome", "admin", "password123", "123123", "1234567", "password1",
+        "123456789", "1234567890", "111111", "000000", "password!", "qwerty123"
+    ]
+    
+    attempts = 0
+    found = False
+    time_estimate = 0
+    method_used = ""
+    
+    if attack_mode == "dictionary":
+        # Dictionary attack simulation
+        method_used = "Dictionary Attack"
+        for pwd in common_passwords:
+            attempts += 1
+            if pwd == target_password:
+                found = True
+                break
+        time_estimate = attempts * 0.001  # 1ms per attempt
+    
+    elif attack_mode == "brute_force":
+        # Brute force simulation (limited)
+        method_used = "Brute Force Attack"
+        import string
+        charset = string.ascii_lowercase + string.digits
+        
+        # Only simulate up to 4 character passwords for demo
+        max_attempts = min(len(charset) ** min(len(target_password), 4), 10000)
+        
+        if len(target_password) <= 4 and all(c in charset for c in target_password):
+            # Calculate position in search space
+            attempts = sum((charset.index(c) + 1) * (len(charset) ** (len(target_password) - i - 1)) 
+                          for i, c in enumerate(target_password))
+            found = True
+        else:
+            attempts = max_attempts
+            found = False
+        
+        time_estimate = attempts * 0.002  # 2ms per attempt
+    
+    elif attack_mode == "hybrid":
+        # Hybrid attack (dictionary + mutations)
+        method_used = "Hybrid Attack (Dictionary + Mutations)"
+        mutations = []
+        for pwd in common_passwords[:10]:
+            mutations.extend([
+                pwd,
+                pwd + "1",
+                pwd + "!",
+                pwd + "123",
+                pwd.capitalize(),
+                pwd.upper()
+            ])
+        
+        for pwd in mutations:
+            attempts += 1
+            if pwd == target_password:
+                found = True
+                break
+        
+        time_estimate = attempts * 0.0015  # 1.5ms per attempt
+    
+    # Calculate complexity
+    import string
+    charset_size = 0
+    if any(c.islower() for c in target_password):
+        charset_size += 26
+    if any(c.isupper() for c in target_password):
+        charset_size += 26
+    if any(c.isdigit() for c in target_password):
+        charset_size += 10
+    if any(not c.isalnum() for c in target_password):
+        charset_size += 32
+    
+    possible_combinations = charset_size ** len(target_password)
+    
+    return {
+        "target_length": len(target_password),
+        "attack_mode": method_used,
+        "found": found,
+        "attempts": attempts,
+        "time_taken": f"{time_estimate:.3f} seconds",
+        "success_rate": round((1 if found else 0) * 100, 2),
+        "password_strength": {
+            "length": len(target_password),
+            "charset_size": charset_size,
+            "possible_combinations": possible_combinations,
+            "estimated_crack_time": f"{possible_combinations * 0.001 / 3600 / 24 / 365:.2f} years at 1000/sec"
+        },
+        "prevention_tips": [
+            "Use passwords longer than 12 characters",
+            "Mix uppercase, lowercase, numbers, and symbols",
+            "Avoid dictionary words and common patterns",
+            "Use passphrases with random words",
+            "Enable account lockout after failed attempts",
+            "Implement rate limiting on login endpoints",
+            "Use CAPTCHA after 3-5 failed attempts",
+            "Consider multi-factor authentication (MFA)"
+        ],
+        "attack_comparison": {
+            "dictionary": "Tests common passwords (~10k in 10 seconds)",
+            "brute_force": "Tries all combinations (62^8 = 218 trillion for 8 chars)",
+            "hybrid": "Combines dictionary + mutations (100k+ in minutes)"
+        },
+        "disclaimer": "Educational simulation - real attacks use GPUs and distributed systems."
+    }
+
+# 22) MOBILE SECURITY CHECKER
+def mobile_security_checker(app_name: str, platform: str = "android") -> dict:
+    """
+    Analyze mobile app security posture and best practices.
+    Simulates security checks for iOS and Android applications.
+    """
+    
+    platform = platform.lower()
+    app_hash = hashlib.md5(app_name.encode()).hexdigest()
+    security_score = int(app_hash[:2], 16) % 40 + 60  # 60-100 range
+    
+    # Common security checks
+    checks = []
+    
+    if platform == "android":
+        checks = [
+            {
+                "category": "Permissions",
+                "check": "App requests only necessary permissions",
+                "status": "pass" if security_score > 70 else "fail",
+                "severity": "high",
+                "recommendation": "Remove unused permissions from AndroidManifest.xml"
+            },
+            {
+                "category": "Data Storage",
+                "check": "Sensitive data encrypted at rest",
+                "status": "pass" if security_score > 75 else "warning",
+                "severity": "critical",
+                "recommendation": "Use Android Keystore for encryption keys"
+            },
+            {
+                "category": "Network Security",
+                "check": "Certificate pinning implemented",
+                "status": "pass" if security_score > 80 else "fail",
+                "severity": "high",
+                "recommendation": "Implement SSL certificate pinning"
+            },
+            {
+                "category": "Code Obfuscation",
+                "check": "ProGuard/R8 enabled",
+                "status": "pass" if security_score > 65 else "warning",
+                "severity": "medium",
+                "recommendation": "Enable code obfuscation in build.gradle"
+            },
+            {
+                "category": "Root Detection",
+                "check": "Root detection active",
+                "status": "pass" if security_score > 70 else "fail",
+                "severity": "medium",
+                "recommendation": "Implement RootBeer library for detection"
+            },
+            {
+                "category": "API Security",
+                "check": "API keys not hardcoded",
+                "status": "pass" if security_score > 85 else "fail",
+                "severity": "critical",
+                "recommendation": "Use BuildConfig or remote config for keys"
+            }
+        ]
+    else:  # iOS
+        checks = [
+            {
+                "category": "Data Protection",
+                "check": "FileProtectionComplete enabled",
+                "status": "pass" if security_score > 75 else "fail",
+                "severity": "critical",
+                "recommendation": "Enable Data Protection in app capabilities"
+            },
+            {
+                "category": "Keychain",
+                "check": "Sensitive data in Keychain",
+                "status": "pass" if security_score > 70 else "warning",
+                "severity": "high",
+                "recommendation": "Store credentials in iOS Keychain"
+            },
+            {
+                "category": "Transport Security",
+                "check": "App Transport Security (ATS) enabled",
+                "status": "pass" if security_score > 80 else "fail",
+                "severity": "high",
+                "recommendation": "Enable ATS, avoid NSAllowsArbitraryLoads"
+            },
+            {
+                "category": "Binary Protection",
+                "check": "PIE (Position Independent Executable)",
+                "status": "pass",
+                "severity": "medium",
+                "recommendation": "Default enabled in modern Xcode"
+            },
+            {
+                "category": "Jailbreak Detection",
+                "check": "Jailbreak detection active",
+                "status": "pass" if security_score > 70 else "warning",
+                "severity": "medium",
+                "recommendation": "Implement jailbreak detection library"
+            },
+            {
+                "category": "Code Signing",
+                "check": "Valid code signature",
+                "status": "pass",
+                "severity": "critical",
+                "recommendation": "Maintained automatically by Xcode"
+            }
+        ]
+    
+    passed = sum(1 for c in checks if c["status"] == "pass")
+    warnings = sum(1 for c in checks if c["status"] == "warning")
+    failed = sum(1 for c in checks if c["status"] == "fail")
+    
+    risk_level = "LOW" if failed == 0 else "MEDIUM" if failed <= 2 else "HIGH"
+    
+    return {
+        "app_name": app_name,
+        "platform": platform.upper(),
+        "security_score": security_score,
+        "risk_level": risk_level,
+        "checks_total": len(checks),
+        "checks_passed": passed,
+        "checks_warning": warnings,
+        "checks_failed": failed,
+        "security_checks": checks,
+        "owasp_mobile_top_10": [
+            "M1: Improper Platform Usage",
+            "M2: Insecure Data Storage",
+            "M3: Insecure Communication",
+            "M4: Insecure Authentication",
+            "M5: Insufficient Cryptography",
+            "M6: Insecure Authorization",
+            "M7: Client Code Quality",
+            "M8: Code Tampering",
+            "M9: Reverse Engineering",
+            "M10: Extraneous Functionality"
+        ],
+        "recommendations": [
+            "Regular security audits and penetration testing",
+            "Follow OWASP Mobile Security Testing Guide (MSTG)",
+            "Implement proper session management",
+            "Use secure coding practices",
+            "Keep dependencies updated"
+        ],
+        "disclaimer": "Simulated security assessment - not actual app analysis."
+    }
+
+# 23) API SECURITY ANALYZER
+def api_security_analyzer(endpoint_url: str, method: str = "GET") -> dict:
+    """
+    Analyze API endpoint security and identify vulnerabilities.
+    Maps findings to OWASP API Security Top 10.
+    """
+    
+    url_hash = hashlib.sha256(endpoint_url.encode()).hexdigest()
+    security_score = 100 - (int(url_hash[:2], 16) % 50)  # 50-100 range
+    
+    vulnerabilities = []
+    
+    # Check for common API security issues
+    if "http://" in endpoint_url:
+        vulnerabilities.append({
+            "issue": "Insecure HTTP Protocol",
+            "severity": "high",
+            "owasp": "API8:2023 Security Misconfiguration",
+            "description": "API uses unencrypted HTTP instead of HTTPS",
+            "remediation": "Enforce HTTPS for all API endpoints"
+        })
+    
+    if "/api/v1/users/" in endpoint_url and method == "GET":
+        vulnerabilities.append({
+            "issue": "Potential Data Exposure",
+            "severity": "medium",
+            "owasp": "API3:2023 Broken Object Property Level Authorization",
+            "description": "User enumeration possible via sequential IDs",
+            "remediation": "Use UUIDs instead of sequential IDs"
+        })
+    
+    if "admin" in endpoint_url.lower():
+        vulnerabilities.append({
+            "issue": "Sensitive Path Exposed",
+            "severity": "high",
+            "owasp": "API1:2023 Broken Object Level Authorization",
+            "description": "Admin endpoints may lack proper authorization",
+            "remediation": "Implement role-based access control (RBAC)"
+        })
+    
+    if "/api/" not in endpoint_url:
+        vulnerabilities.append({
+            "issue": "No API Versioning",
+            "severity": "low",
+            "owasp": "API9:2023 Improper Inventory Management",
+            "description": "API versioning not detected in URL",
+            "remediation": "Implement /api/v1/ style versioning"
+        })
+    
+    # Security headers check (simulated)
+    security_headers = {
+        "X-Content-Type-Options": "nosniff" if security_score > 70 else "missing",
+        "X-Frame-Options": "DENY" if security_score > 75 else "missing",
+        "Content-Security-Policy": "present" if security_score > 80 else "missing",
+        "Strict-Transport-Security": "max-age=31536000" if security_score > 85 else "missing"
+    }
+    
+    # Rate limiting check
+    rate_limiting = {
+        "enabled": security_score > 70,
+        "limit": "100 requests/minute" if security_score > 70 else "None",
+        "header": "X-RateLimit-Limit" if security_score > 70 else "missing"
+    }
+    
+    # Authentication methods
+    auth_methods = []
+    if security_score > 80:
+        auth_methods = ["OAuth 2.0", "JWT"]
+    elif security_score > 60:
+        auth_methods = ["API Key"]
+    else:
+        auth_methods = ["None detected"]
+    
+    risk_level = "CRITICAL" if len(vulnerabilities) >= 3 else "HIGH" if len(vulnerabilities) >= 2 else "MEDIUM" if len(vulnerabilities) >= 1 else "LOW"
+    
+    return {
+        "endpoint": endpoint_url,
+        "method": method,
+        "security_score": security_score,
+        "risk_level": risk_level,
+        "vulnerabilities": vulnerabilities,
+        "vulnerability_count": len(vulnerabilities),
+        "security_headers": security_headers,
+        "rate_limiting": rate_limiting,
+        "authentication": {
+            "methods": auth_methods,
+            "recommendation": "Use OAuth 2.0 with JWT tokens"
+        },
+        "owasp_api_top_10": [
+            "API1:2023 Broken Object Level Authorization",
+            "API2:2023 Broken Authentication",
+            "API3:2023 Broken Object Property Level Authorization",
+            "API4:2023 Unrestricted Resource Consumption",
+            "API5:2023 Broken Function Level Authorization",
+            "API6:2023 Unrestricted Access to Sensitive Business Flows",
+            "API7:2023 Server Side Request Forgery",
+            "API8:2023 Security Misconfiguration",
+            "API9:2023 Improper Inventory Management",
+            "API10:2023 Unsafe Consumption of APIs"
+        ],
+        "recommendations": [
+            "Implement proper authentication and authorization",
+            "Use API gateways for centralized security",
+            "Enable rate limiting and throttling",
+            "Validate and sanitize all inputs",
+            "Log and monitor API access",
+            "Implement CORS policies correctly",
+            "Use API versioning",
+            "Regular security testing and audits"
+        ],
+        "cors_policy": {
+            "enabled": security_score > 75,
+            "allow_origin": "*" if security_score < 60 else "specific domains",
+            "recommendation": "Use specific origin whitelist"
+        },
+        "disclaimer": "Simulated API analysis - not actual endpoint testing."
+    }

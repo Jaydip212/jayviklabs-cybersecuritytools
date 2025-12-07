@@ -24,7 +24,11 @@ from utils import (
     encode_text_in_image,
     decode_text_from_image,
     hash_cracker,
-    cve_lookup
+    cve_lookup,
+    xss_vulnerability_tester,
+    brute_force_simulator,
+    mobile_security_checker,
+    api_security_analyzer
 )
 
 app = FastAPI(title="Jayvik Labs — Cybersecurity Edu API")
@@ -204,4 +208,36 @@ def scan_vulnerabilities(payload: Dict):
     return cve_lookup(
         payload.get('software', ''),
         payload.get('version', None)
+    )
+
+@app.post('/security/xss-test')
+def test_xss(payload: Dict):
+    """Test for XSS vulnerabilities (educational)."""
+    return xss_vulnerability_tester(
+        payload.get('input', ''),
+        payload.get('context', 'html')
+    )
+
+@app.post('/security/brute-force')
+def simulate_brute_force(payload: Dict):
+    """Simulate brute force password cracking (educational)."""
+    return brute_force_simulator(
+        payload.get('target_password', ''),
+        payload.get('attack_mode', 'dictionary')
+    )
+
+@app.post('/mobile/security-check')
+def check_mobile_security(payload: Dict):
+    """Analyze mobile app security posture (simulated)."""
+    return mobile_security_checker(
+        payload.get('app_name', ''),
+        payload.get('platform', 'android')
+    )
+
+@app.post('/api/security-analyze')
+def analyze_api_security(payload: Dict):
+    """Analyze API endpoint security (simulated)."""
+    return api_security_analyzer(
+        payload.get('endpoint_url', ''),
+        payload.get('method', 'GET')
     )
