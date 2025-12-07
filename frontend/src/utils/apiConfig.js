@@ -5,9 +5,16 @@ export const API_URL = (() => {
   }
 
   if (typeof window !== 'undefined') {
-    const protocol = window.location.protocol === 'https:' ? 'https' : 'http'
-    const host = window.location.hostname || 'localhost'
-    return `${protocol}://${host}:8000`
+    const protocol = window.location.protocol
+    const host = window.location.hostname
+    
+    // Production deployment
+    if (host.includes('vercel.app') || host.includes('netlify.app') || host !== 'localhost') {
+      return `${protocol}//${host}/api`
+    }
+    
+    // Local development
+    return `${protocol === 'https:' ? 'https' : 'http'}://${host}:8000`
   }
 
   return 'http://localhost:8000'
