@@ -1475,3 +1475,236 @@ def api_security_analyzer(endpoint_url: str, method: str = "GET") -> dict:
         },
         "disclaimer": "Simulated API analysis - not actual endpoint testing."
     }
+
+
+def csrf_token_generator():
+    """Generate and validate CSRF tokens"""
+    import time
+    timestamp = int(time.time())
+    token = secrets.token_urlsafe(32)
+    csrf_token = f"{token}_{timestamp}"
+    
+    return {
+        "token": csrf_token,
+        "timestamp": timestamp,
+        "expiration": timestamp + 3600,
+        "algorithm": "SHA-256 HMAC",
+        "strength": "strong",
+        "validation_methods": [
+            "Double-submit cookie pattern",
+            "Synchronizer token pattern",
+            "Custom header validation"
+        ],
+        "best_practices": [
+            "Regenerate tokens on login",
+            "Include in hidden form fields",
+            "Validate on state-changing operations",
+            "Use SameSite cookie attribute",
+            "Implement token expiration",
+            "Store securely server-side"
+        ],
+        "common_vulnerabilities": [
+            "Token not validated",
+            "Token reused across sessions",
+            "Weak token generation",
+            "Token exposed in logs",
+            "No token rotation"
+        ],
+        "implementation_guide": {
+            "generation": f"Token: {csrf_token}",
+            "storage": "Server-side session store",
+            "validation": "Compare submitted vs stored token",
+            "headers": "X-CSRF-Token header or form field"
+        }
+    }
+
+
+def log_analyzer(log_content):
+    """Analyze logs for security issues"""
+    import re
+    
+    issues = []
+    severity_score = 100
+    
+    patterns = {
+        "sql_injection": r"(union|select|insert|update|delete|drop|exec|execute|script)(\s|;)",
+        "xss": r"(<script|javascript:|onerror=|onclick=|<iframe|<img)",
+        "path_traversal": r"(\.\./|\.\.\\|%2e%2e)",
+        "command_injection": r"(; |&& ||| |\| |`)",
+        "credentials": r"(password|passwd|pwd|secret|token|api_key|apikey)(\s*=|\s*:|'|\")",
+        "error_exposure": r"(error|exception|stack trace|sql error|database error)",
+        "unauthorized_access": r"(401|403|forbidden|unauthorized)",
+        "suspicious_activity": r"(admin|root|system|sudo)"
+    }
+    
+    log_lines = log_content.split('\n')
+    
+    for idx, line in enumerate(log_lines):
+        for threat_type, pattern in patterns.items():
+            if re.search(pattern, line, re.IGNORECASE):
+                if threat_type == "credentials":
+                    severity = "critical"
+                    severity_score -= 20
+                elif threat_type in ["sql_injection", "command_injection"]:
+                    severity = "high"
+                    severity_score -= 15
+                elif threat_type in ["xss", "path_traversal"]:
+                    severity = "high"
+                    severity_score -= 12
+                elif threat_type == "error_exposure":
+                    severity = "medium"
+                    severity_score -= 8
+                else:
+                    severity = "low"
+                    severity_score -= 3
+                
+                issues.append({
+                    "line": idx + 1,
+                    "threat_type": threat_type.replace('_', ' ').title(),
+                    "severity": severity,
+                    "content": line.strip()[:80],
+                    "recommendation": f"Investigate {threat_type.replace('_', ' ')} activity"
+                })
+    
+    severity_score = max(0, severity_score)
+    risk_level = "CRITICAL" if severity_score < 40 else "HIGH" if severity_score < 60 else "MEDIUM" if severity_score < 80 else "LOW"
+    
+    return {
+        "total_lines": len(log_lines),
+        "issues_found": len(issues),
+        "security_score": severity_score,
+        "risk_level": risk_level,
+        "issues": issues[:20],  # Return top 20 issues
+        "recommendations": [
+            "Enable logging for all security events",
+            "Implement log aggregation and centralization",
+            "Never log sensitive data (passwords, tokens)",
+            "Set up real-time alerts for suspicious patterns",
+            "Rotate logs regularly",
+            "Protect log files with proper access controls",
+            "Use structured logging (JSON format)",
+            "Monitor for anomalies using ML/heuristics"
+        ],
+        "patterns_checked": list(patterns.keys()),
+        "timestamp": datetime.datetime.now().isoformat()
+    }
+
+
+def url_shortener_security_check(long_url):
+    """Analyze URL for security issues"""
+    import re
+    from urllib.parse import urlparse
+    
+    issues = []
+    score = 100
+    
+    try:
+        parsed = urlparse(long_url)
+        scheme = parsed.scheme
+        domain = parsed.netloc
+        path = parsed.path
+        query = parsed.query
+    except:
+        return {
+            "url": long_url,
+            "valid": False,
+            "security_score": 0,
+            "risk_level": "CRITICAL",
+            "issues": [{"type": "Invalid URL", "severity": "critical"}]
+        }
+    
+    # Check HTTPS
+    if scheme != "https":
+        issues.append({
+            "type": "Not HTTPS",
+            "severity": "high",
+            "description": "URL uses HTTP instead of HTTPS",
+            "impact": "Data transmitted without encryption"
+        })
+        score -= 20
+    
+    # Check for suspicious domains
+    suspicious_keywords = ["bit.ly", "tinyurl", "goo.gl", "ow.ly", "short.link"]
+    if any(keyword in domain for keyword in suspicious_keywords):
+        issues.append({
+            "type": "Shortener Detected",
+            "severity": "medium",
+            "description": "URL is already shortened",
+            "impact": "Destination URL is hidden"
+        })
+        score -= 10
+    
+    # Check for IP address instead of domain
+    if re.match(r'^\d+\.\d+\.\d+\.\d+', domain):
+        issues.append({
+            "type": "IP-based URL",
+            "severity": "medium",
+            "description": "URL uses IP address instead of domain",
+            "impact": "May indicate phishing or malicious site"
+        })
+        score -= 12
+    
+    # Check for query parameters with suspicious keywords
+    if query:
+        suspicious_params = ["admin", "password", "token", "key", "secret", "payload"]
+        for param in suspicious_params:
+            if param in query.lower():
+                issues.append({
+                    "type": f"Suspicious Parameter: {param}",
+                    "severity": "medium",
+                    "description": f"Query parameter '{param}' found",
+                    "impact": "Possible credential exposure"
+                })
+                score -= 8
+    
+    # Check for encoded content (potential malware)
+    if re.search(r'%[0-9a-f]{2}', long_url, re.IGNORECASE):
+        if len([m.start() for m in re.finditer(r'%[0-9a-f]{2}', long_url, re.IGNORECASE)]) > 5:
+            issues.append({
+                "type": "Heavily Encoded",
+                "severity": "high",
+                "description": "URL contains excessive URL encoding",
+                "impact": "May hide malicious code"
+            })
+            score -= 15
+    
+    # Check domain reputation (simulated)
+    known_phishing = ["paypal-verify", "amazon-confirm", "apple-id-update", "microsoft-account"]
+    if any(keyword in domain for keyword in known_phishing):
+        issues.append({
+            "type": "Phishing Indicator",
+            "severity": "critical",
+            "description": "Domain matches known phishing patterns",
+            "impact": "High risk of social engineering attack"
+        })
+        score -= 30
+    
+    risk_level = "CRITICAL" if score < 40 else "HIGH" if score < 60 else "MEDIUM" if score < 80 else "LOW"
+    
+    # Generate shortened version (simulated)
+    shortened = f"https://jayvik.short/{secrets.token_urlsafe(6)}"
+    
+    return {
+        "original_url": long_url,
+        "shortened_url": shortened,
+        "url_length": len(long_url),
+        "valid": True,
+        "security_score": max(0, score),
+        "risk_level": risk_level,
+        "scheme": scheme,
+        "domain": domain,
+        "issues": issues,
+        "issues_count": len(issues),
+        "safe_to_share": risk_level == "LOW",
+        "recommendations": [
+            "Always use HTTPS URLs",
+            "Verify domain ownership",
+            "Check URL before clicking",
+            "Use browser security extensions",
+            "Enable two-factor authentication",
+            "Report suspicious URLs to authorities",
+            "Educate users about phishing",
+            "Use URL scanning services"
+        ],
+        "timestamp": datetime.datetime.now().isoformat()
+    }

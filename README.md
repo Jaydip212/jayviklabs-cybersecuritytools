@@ -2,7 +2,7 @@
 
 An interactive learning platform combining a React (Vite) frontend with a Python FastAPI backend. Everything runs locally and simulates cybersecurity concepts in a safe, legal environment — **no real networks or systems are touched.**
 
-## ✨ Features (22 Interactive Tools)
+## ✨ Features (25 Interactive Tools)
 
 ### 🔐 Core Security Tools
 - **Password Strength Analyzer** — Provides score, strength, and best-practice suggestions
@@ -28,6 +28,9 @@ An interactive learning platform combining a React (Vite) frontend with a Python
 - **Brute Force Password Simulator** — Dictionary, brute force, and hybrid attack simulations
 - **Mobile Security Checker** — Android/iOS security audit with OWASP Mobile Top 10 mapping
 - **API Security Analyzer** — Endpoint security analysis with OWASP API Security Top 10 (2023)
+- **CSRF Token Generator** — Generate secure CSRF protection tokens with validation methods
+- **Log Security Analyzer** — Analyze logs for threats, vulnerabilities, and suspicious patterns
+- **URL Security Checker** — Check URLs for phishing, malware, and security risks
 
 ### 🛡️ Vulnerability & Threat Analysis
 - **Vulnerability Scanner** — CVE lookup simulator with severity ratings and remediation
@@ -83,6 +86,9 @@ jayvik-cybertool/
            ├── BruteForceSimulator.jsx
            ├── MobileSecurityChecker.jsx
            ├── ApiSecurityAnalyzer.jsx
+           ├── CsrfTokenGenerator.jsx
+           ├── LogAnalyzer.jsx
+           ├── UrlSecurityChecker.jsx
            ├── LearnMode.jsx
            └── AboutPage.jsx
 └── README.md
@@ -145,6 +151,9 @@ npm run dev
 | `/security/brute-force`| POST   | Password cracking simulation (dictionary/brute/hybrid)|
 | `/mobile/security-check`| POST  | Mobile app security audit (Android/iOS)         |
 | `/api/security-analyze`| POST   | API endpoint security analysis with OWASP mapping|
+| `/security/csrf-token` | POST   | Generate CSRF protection tokens                 |
+| `/security/analyze-logs`| POST  | Analyze logs for security threats and patterns  |
+| `/security/check-url` | POST   | Check URLs for phishing and security risks      |
 | **Analysis & Planning**|        |                                                  |
 | `/phishing/analyze`    | POST   | Heuristic phishing message analysis (simulation) |
 | `/recon/blueprint`     | POST   | Generate simulated recon checklist               |

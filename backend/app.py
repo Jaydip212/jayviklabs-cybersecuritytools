@@ -28,7 +28,10 @@ from utils import (
     xss_vulnerability_tester,
     brute_force_simulator,
     mobile_security_checker,
-    api_security_analyzer
+    api_security_analyzer,
+    csrf_token_generator,
+    log_analyzer,
+    url_shortener_security_check
 )
 
 app = FastAPI(title="Jayvik Labs — Cybersecurity Edu API")
@@ -241,3 +244,18 @@ def analyze_api_security(payload: Dict):
         payload.get('endpoint_url', ''),
         payload.get('method', 'GET')
     )
+
+@app.post('/security/csrf-token')
+def generate_csrf_token():
+    """Generate CSRF protection token."""
+    return csrf_token_generator()
+
+@app.post('/security/analyze-logs')
+def analyze_logs(payload: Dict):
+    """Analyze logs for security issues."""
+    return log_analyzer(payload.get('log_content', ''))
+
+@app.post('/security/check-url')
+def check_url_security(payload: Dict):
+    """Check URL for security issues."""
+    return url_shortener_security_check(payload.get('url', ''))

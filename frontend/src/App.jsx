@@ -23,6 +23,9 @@ import XssTester from './components/XssTester'
 import BruteForceSimulator from './components/BruteForceSimulator'
 import MobileSecurityChecker from './components/MobileSecurityChecker'
 import ApiSecurityAnalyzer from './components/ApiSecurityAnalyzer'
+import CsrfTokenGenerator from './components/CsrfTokenGenerator'
+import LogAnalyzer from './components/LogAnalyzer'
+import UrlSecurityChecker from './components/UrlSecurityChecker'
 import AboutPage from './components/AboutPage'
 
 export default function App(){
@@ -63,7 +66,7 @@ export default function App(){
               <span className="metric-label">Safe Training</span>
             </div>
             <div className="metric-card">
-              <span className="metric-value">22 Labs</span>
+              <span className="metric-value">25 Labs</span>
               <span className="metric-label">Interactive Modules</span>
             </div>
             <div className="metric-card">
@@ -100,6 +103,9 @@ export default function App(){
           <BruteForceSimulator />
           <MobileSecurityChecker />
           <ApiSecurityAnalyzer />
+          <CsrfTokenGenerator />
+          <LogAnalyzer />
+          <UrlSecurityChecker />
         </div>
 
         <section id="testimonials" className="testimonials">

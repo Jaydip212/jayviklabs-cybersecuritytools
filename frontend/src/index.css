@@ -104,6 +104,27 @@ body {
   box-shadow: 0 0 18px rgba(57, 255, 20, 0.7);
 }
 
+.theme-toggle-btn {
+  background: rgba(57, 255, 20, 0.1);
+  border: 1px solid rgba(57, 255, 20, 0.3);
+  color: var(--jayvik-emerald);
+  font-size: 18px;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+
+.theme-toggle-btn:hover {
+  background: rgba(57, 255, 20, 0.25);
+  box-shadow: 0 0 12px rgba(57, 255, 20, 0.5);
+  transform: rotate(20deg);
+}
+
 .container {
   flex: 1;
   max-width: 1200px;
@@ -4094,6 +4115,614 @@ blockquote span {
 .api-disclaimer {
   background: rgba(249, 115, 22, 0.08);
   border: 1px solid rgba(249, 115, 22, 0.3);
+}
+
+/* ============ CSRF TOKEN GENERATOR ============ */
+.csrf-container {
+  padding: 24px;
+}
+
+.csrf-section {
+  background: rgba(15, 23, 42, 0.6);
+  border: 1px solid rgba(57, 255, 20, 0.2);
+  border-radius: 12px;
+  padding: 20px;
+  margin: 20px 0;
+  text-align: center;
+}
+
+.token-display {
+  background: rgba(1, 3, 10, 0.6);
+  border: 2px solid rgba(57, 255, 20, 0.3);
+  border-radius: 8px;
+  padding: 20px;
+  margin: 20px 0;
+}
+
+.token-box {
+  background: rgba(0, 0, 0, 0.8);
+  border-radius: 8px;
+  padding: 16px;
+  margin: 16px 0;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.token-box code {
+  flex: 1;
+  font-size: 12px;
+  color: var(--jayvik-emerald);
+  word-break: break-all;
+}
+
+.btn-copy {
+  padding: 8px 16px;
+  background: rgba(57, 255, 20, 0.2);
+  border: 1px solid rgba(57, 255, 20, 0.4);
+  color: var(--jayvik-emerald);
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: all 0.3s;
+}
+
+.btn-copy:hover {
+  background: rgba(57, 255, 20, 0.4);
+  box-shadow: 0 0 8px rgba(57, 255, 20, 0.3);
+}
+
+.token-info {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 12px;
+  margin: 20px 0;
+}
+
+.info-card {
+  background: rgba(57, 255, 20, 0.08);
+  border: 1px solid rgba(57, 255, 20, 0.2);
+  border-radius: 8px;
+  padding: 12px;
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.strength-badge {
+  background: #22c55e;
+  color: white;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-weight: bold;
+}
+
+.validation-methods, .best-practices, .common-vulnerabilities, .implementation-guide {
+  background: rgba(1, 3, 10, 0.6);
+  border: 1px solid rgba(57, 255, 20, 0.2);
+  border-radius: 8px;
+  padding: 16px;
+  margin: 16px 0;
+}
+
+.validation-methods h3, .best-practices h3, .common-vulnerabilities h3, .implementation-guide h3 {
+  color: var(--jayvik-emerald);
+  margin-top: 0;
+}
+
+.validation-methods ul, .best-practices ul, .common-vulnerabilities ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.validation-methods li, .best-practices li, .common-vulnerabilities li {
+  padding: 8px 0;
+  color: rgba(255, 255, 255, 0.8);
+  border-bottom: 1px solid rgba(57, 255, 20, 0.1);
+}
+
+.validation-methods li:last-child, .best-practices li:last-child, .common-vulnerabilities li:last-child {
+  border-bottom: none;
+}
+
+.guide-box {
+  background: rgba(57, 255, 20, 0.08);
+  border: 1px solid rgba(57, 255, 20, 0.2);
+  border-radius: 6px;
+  padding: 12px;
+}
+
+.guide-box p {
+  margin: 8px 0;
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.csrf-disclaimer {
+  background: rgba(249, 115, 22, 0.08);
+  border: 1px solid rgba(249, 115, 22, 0.3);
+  border-radius: 8px;
+  padding: 12px;
+  margin: 16px 0;
+}
+
+.csrf-info {
+  background: rgba(156, 108, 255, 0.08);
+  border: 1px solid rgba(156, 108, 255, 0.2);
+  border-radius: 8px;
+  padding: 16px;
+  margin-top: 24px;
+}
+
+.csrf-info h3 {
+  color: var(--jayvik-purple);
+}
+
+/* ============ LOG ANALYZER ============ */
+.log-analyzer-container {
+  padding: 24px;
+}
+
+.log-section {
+  background: rgba(15, 23, 42, 0.6);
+  border: 1px solid rgba(57, 255, 20, 0.2);
+  border-radius: 12px;
+  padding: 20px;
+  margin: 20px 0;
+}
+
+.log-textarea {
+  width: 100%;
+  min-height: 150px;
+  background: rgba(1, 3, 10, 0.8);
+  border: 1px solid rgba(57, 255, 20, 0.3);
+  border-radius: 8px;
+  padding: 12px;
+  color: #f5f9ff;
+  font-family: 'Courier New', monospace;
+  font-size: 13px;
+  resize: vertical;
+}
+
+.log-textarea:focus {
+  outline: none;
+  border-color: var(--jayvik-emerald);
+  box-shadow: 0 0 12px rgba(57, 255, 20, 0.2);
+}
+
+.sample-logs {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  margin: 16px 0;
+  flex-wrap: wrap;
+}
+
+.sample-logs p {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.btn-sample-log {
+  padding: 8px 12px;
+  background: rgba(57, 255, 20, 0.15);
+  border: 1px solid rgba(57, 255, 20, 0.3);
+  color: var(--jayvik-emerald);
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 12px;
+  transition: all 0.3s;
+}
+
+.btn-sample-log:hover {
+  background: rgba(57, 255, 20, 0.3);
+}
+
+.log-results {
+  background: rgba(15, 23, 42, 0.6);
+  border: 1px solid rgba(57, 255, 20, 0.2);
+  border-radius: 12px;
+  padding: 24px;
+  margin: 24px 0;
+}
+
+.log-overview {
+  margin-bottom: 24px;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.stat-box {
+  background: rgba(1, 3, 10, 0.6);
+  border: 1px solid rgba(57, 255, 20, 0.2);
+  border-radius: 8px;
+  padding: 16px;
+  text-align: center;
+}
+
+.stat-label {
+  display: block;
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 12px;
+  margin-bottom: 8px;
+}
+
+.stat-value {
+  display: block;
+  font-size: 24px;
+  font-weight: bold;
+  color: var(--jayvik-emerald);
+}
+
+.issues-section {
+  margin: 24px 0;
+}
+
+.issues-list {
+  display: grid;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.issue-card {
+  background: rgba(239, 68, 68, 0.08);
+  border-left: 4px solid #ef4444;
+  border-radius: 6px;
+  padding: 12px;
+}
+
+.issue-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.issue-type {
+  color: var(--jayvik-emerald);
+  font-weight: bold;
+}
+
+.severity-badge {
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: bold;
+  color: white;
+}
+
+.issue-content {
+  background: rgba(0, 0, 0, 0.4);
+  border-radius: 4px;
+  padding: 8px;
+  margin: 8px 0;
+}
+
+.issue-content code {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.8);
+  word-break: break-all;
+}
+
+.issue-line {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.recommendations-section {
+  background: rgba(57, 255, 20, 0.08);
+  border: 1px solid rgba(57, 255, 20, 0.2);
+  border-radius: 8px;
+  padding: 16px;
+  margin: 16px 0;
+}
+
+.recommendations-list {
+  list-style: none;
+  padding: 0;
+  margin: 8px 0;
+}
+
+.recommendations-list li {
+  padding: 6px 0;
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 14px;
+}
+
+.patterns-checked {
+  margin-top: 16px;
+}
+
+.patterns-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.pattern-badge {
+  background: rgba(57, 255, 20, 0.15);
+  border: 1px solid rgba(57, 255, 20, 0.3);
+  border-radius: 6px;
+  padding: 8px;
+  text-align: center;
+  font-size: 12px;
+  color: var(--jayvik-emerald);
+  font-weight: bold;
+}
+
+.log-disclaimer {
+  background: rgba(249, 115, 22, 0.08);
+  border: 1px solid rgba(249, 115, 22, 0.3);
+  border-radius: 8px;
+  padding: 12px;
+  margin: 16px 0;
+}
+
+.log-info {
+  background: rgba(156, 108, 255, 0.08);
+  border: 1px solid rgba(156, 108, 255, 0.2);
+  border-radius: 8px;
+  padding: 16px;
+  margin-top: 24px;
+}
+
+.log-info h3 {
+  color: var(--jayvik-purple);
+}
+
+/* ============ URL SECURITY CHECKER ============ */
+.url-checker-container {
+  padding: 24px;
+}
+
+.url-section {
+  background: rgba(15, 23, 42, 0.6);
+  border: 1px solid rgba(57, 255, 20, 0.2);
+  border-radius: 12px;
+  padding: 20px;
+  margin: 20px 0;
+}
+
+.url-input-area {
+  margin: 16px 0;
+}
+
+.url-input {
+  width: 100%;
+  padding: 12px;
+  background: rgba(1, 3, 10, 0.8);
+  border: 1px solid rgba(57, 255, 20, 0.3);
+  border-radius: 8px;
+  color: #f5f9ff;
+  font-family: 'Courier New', monospace;
+  font-size: 14px;
+}
+
+.url-input:focus {
+  outline: none;
+  border-color: var(--jayvik-emerald);
+  box-shadow: 0 0 12px rgba(57, 255, 20, 0.2);
+}
+
+.sample-urls {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  margin: 16px 0;
+  flex-wrap: wrap;
+}
+
+.sample-urls p {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.btn-sample-url {
+  padding: 8px 12px;
+  background: rgba(57, 255, 20, 0.15);
+  border: 1px solid rgba(57, 255, 20, 0.3);
+  color: var(--jayvik-emerald);
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 12px;
+  transition: all 0.3s;
+}
+
+.btn-sample-url:hover {
+  background: rgba(57, 255, 20, 0.3);
+}
+
+.url-results {
+  background: rgba(15, 23, 42, 0.6);
+  border: 1px solid rgba(57, 255, 20, 0.2);
+  border-radius: 12px;
+  padding: 24px;
+  margin: 24px 0;
+}
+
+.url-overview {
+  margin-bottom: 24px;
+}
+
+.url-info-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.url-info-card {
+  background: rgba(1, 3, 10, 0.6);
+  border: 1px solid rgba(57, 255, 20, 0.2);
+  border-radius: 8px;
+  padding: 12px;
+}
+
+.url-info-card .label {
+  display: block;
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.6);
+  margin-bottom: 8px;
+}
+
+.url-display {
+  display: block;
+  background: rgba(0, 0, 0, 0.4);
+  border-radius: 4px;
+  padding: 8px;
+  font-size: 11px;
+  color: var(--jayvik-emerald);
+  word-break: break-all;
+}
+
+.url-info-card .value {
+  display: block;
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.security-assessment {
+  background: rgba(57, 255, 20, 0.08);
+  border: 1px solid rgba(57, 255, 20, 0.2);
+  border-radius: 8px;
+  padding: 16px;
+  margin: 16px 0;
+}
+
+.assessment-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+  margin-top: 16px;
+}
+
+.assessment-box {
+  background: rgba(1, 3, 10, 0.6);
+  border: 1px solid rgba(57, 255, 20, 0.2);
+  border-radius: 8px;
+  padding: 16px;
+  text-align: center;
+}
+
+.assessment-label {
+  display: block;
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.6);
+  margin-bottom: 12px;
+}
+
+.score-bar {
+  width: 100%;
+  height: 8px;
+  background: rgba(57, 255, 20, 0.1);
+  border-radius: 4px;
+  overflow: hidden;
+  margin-bottom: 8px;
+}
+
+.score-fill {
+  height: 100%;
+  transition: width 0.5s ease;
+  box-shadow: 0 0 8px rgba(57, 255, 20, 0.5);
+}
+
+.score-value {
+  display: block;
+  font-size: 18px;
+  font-weight: bold;
+  color: var(--jayvik-emerald);
+}
+
+.risk-badge {
+  display: inline-block;
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-weight: bold;
+  font-size: 14px;
+}
+
+.safety-badge {
+  display: inline-block;
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-weight: bold;
+  font-size: 14px;
+}
+
+.safety-badge.safe {
+  background: rgba(34, 197, 94, 0.2);
+  color: #22c55e;
+}
+
+.safety-badge.unsafe {
+  background: rgba(239, 68, 68, 0.2);
+  color: #ef4444;
+}
+
+.issue-count {
+  display: block;
+  font-size: 24px;
+  font-weight: bold;
+  color: var(--jayvik-emerald);
+}
+
+.url-issue-card {
+  background: rgba(1, 3, 10, 0.6);
+  border-left: 4px solid;
+  border-radius: 6px;
+  padding: 12px;
+  margin-bottom: 12px;
+}
+
+.url-issue-card .issue-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.url-issue-card .issue-type {
+  color: var(--jayvik-emerald);
+  font-weight: bold;
+}
+
+.issue-description {
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 14px;
+  margin: 8px 0;
+}
+
+.issue-impact {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 13px;
+  margin: 0;
+}
+
+.url-disclaimer {
+  background: rgba(249, 115, 22, 0.08);
+  border: 1px solid rgba(249, 115, 22, 0.3);
+  border-radius: 8px;
+  padding: 12px;
+  margin: 16px 0;
+}
+
+.url-info {
+  background: rgba(156, 108, 255, 0.08);
+  border: 1px solid rgba(156, 108, 255, 0.2);
+  border-radius: 8px;
+  padding: 16px;
+  margin-top: 24px;
+}
+
+.url-info h3 {
+  color: var(--jayvik-purple);
 }
 
 /* ============ RESPONSIVE: NEW COMPONENTS ============ */
