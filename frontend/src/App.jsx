@@ -26,6 +26,8 @@ import ApiSecurityAnalyzer from './components/ApiSecurityAnalyzer'
 import CsrfTokenGenerator from './components/CsrfTokenGenerator'
 import LogAnalyzer from './components/LogAnalyzer'
 import UrlSecurityChecker from './components/UrlSecurityChecker'
+import LearningHub from './components/LearningHub'
+import NotificationManager from './components/NotificationManager'
 import AboutPage from './components/AboutPage'
 
 export default function App(){
@@ -53,6 +55,7 @@ export default function App(){
 
   return (
     <div className="app-root" id="home">
+      <NotificationManager />
       <Navbar />
       <main className="container">
         <header className="hero">
@@ -107,6 +110,8 @@ export default function App(){
           <LogAnalyzer />
           <UrlSecurityChecker />
         </div>
+
+        <LearningHub />
 
         <section id="testimonials" className="testimonials">
           <h3>What Students Say</h3>
